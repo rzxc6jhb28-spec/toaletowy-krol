@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Toaletowy Król</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      border-radius: 24px;
+      padding: 20px 18px 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .header {
+      text-align: center;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .big-counter {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .big-counter-main {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .big-counter-label {
+      font-size: 12px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .big-counter-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #22c55e;
+    }
+
+    .big-counter-extra {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .big-counter-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      color: #bbf7d0;
+      white-space: nowrap;
+    }
+
+    .button-area {
+      margin-top: 4px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .main-btn {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.06s ease, box-shadow 0.08s ease;
+    }
+
+    .main-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 2px 10px rgba(34, 197, 94, 0.35);
+    }
+
+    .main-btn span.icon {
+      font-size: 18px;
+    }
+
+    .secondary-btn {
+      width: 42px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.08s ease, transform 0.06s ease;
+    }
+
+    .secondary-btn:active {
+      transform: translateY(1px) scale(0.98);
+      background: rgba(30, 41, 59, 1);
+    }
+
+    .secondary-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .card-label {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .card-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+
+    .card-extra {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .badges {
+      margin-top: 6px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .badges-title {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge-pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #bfdbfe;
+    }
+
+    .calendar {
+      margin-top: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 8px 10px 10px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .calendar-title {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .calendar-months {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    @media (min-width: 480px) {
+      .calendar-months {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        max-height: 300px;
+      }
+    }
+
+    .cal-month {
+      border-radius: 12px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      padding: 4px 4px 6px;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .cal-month-name {
+      font-size: 11px;
+      color: #e5e7eb;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 2px;
+      font-size: 9px;
+    }
+
+    .cal-weekday {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 1px;
+    }
+
+    .cal-day {
+      height: 16px;
+      border-radius: 4px;
+      text-align: center;
+      line-height: 16px;
+      font-size: 9px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(31, 41, 55, 1);
+    }
+
+    .cal-day.empty {
+      border: none;
+      background: transparent;
+    }
+
+    .cal-day.has-entry {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: rgba(34, 197, 94, 0.9);
+      color: #bbf7d0;
+    }
+
+    .cal-day.today {
+      box-shadow: 0 0 0 1px #eab308;
+    }
+
+    .history {
+      margin-top: 8px;
+      flex: 1;
+      min-height: 80px;
+      max-height: 210px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .history-title {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .history-clear {
+      font-size: 11px;
+      color: #f87171;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      padding: 2px 4px;
+    }
+
+    .history-list {
+      margin-top: 4px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 5px 4px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .history-item:nth-child(odd) {
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .history-item-main {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .history-date {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .history-time {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    .history-tag {
+      font-size: 11px;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .footer {
+      margin-top: 6px;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .footer span {
+      color: #9ca3af;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal {
+      background: #020617;
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 14px 14px 12px;
+      max-width: 360px;
+      width: calc(100vw - 40px);
+    }
+
+    .modal-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .modal-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .type-btn {
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 6px 8px;
+      text-align: left;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .type-btn-main {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .type-btn-note {
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-cancel {
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      padding: 4px 6px;
+    }
+
+    @media (max-width: 380px) {
+      .title {
+        font-size: 22px;
+      }
+      .big-counter-value {
+        font-size: 26px;
+      }
+      .card-value {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="title">Toaletowy Król</div>
+      <div class="subtitle">Twój prywatny licznik tronowych sesji</div>
+
+      <div class="big-counter">
+        <div class="big-counter-main">
+          <div class="big-counter-label">Dziś</div>
+          <div class="big-counter-value" id="todayCount">0</div>
+          <div class="big-counter-extra" id="streakInfo">Seria dni ze wpisem 0</div>
+        </div>
+        <div class="big-counter-badge" id="mainBadge">Nowy na tronie</div>
+      </div>
+
+      <div class="button-area">
+        <button class="main-btn" id="addEntryButton">
+          <span class="icon">💩</span>
+          <span>Zarejestruj wizytę</span>
+        </button>
+        <div class="secondary-group">
+          <button class="secondary-btn" id="infoButton" title="Szczegóły punktów">
+            ?
+          </button>
+          <button class="secondary-btn" id="statsButton" title="Statystyki roczne">
+            Σ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards-row">
+      <div class="card">
+        <div class="card-label">Ten tydzień</div>
+        <div class="card-value" id="weekCount">0</div>
+        <div class="card-extra" id="weekExtra"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Ten miesiąc</div>
+        <div class="card-value" id="monthCount">0</div>
+        <div class="card-extra" id="monthExtra"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Ten rok</div>
+        <div class="card-value" id="yearCount">0</div>
+        <div class="card-extra" id="yearExtra"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Łącznie</div>
+        <div class="card-value" id="totalCount">0</div>
+        <div class="card-extra" id="pointsInfo"></div>
+      </div>
+    </div>
+
+    <div class="badges">
+      <div class="badges-title">Twoje odznaki</div>
+      <div class="badge-list" id="badgeList"></div>
+    </div>
+
+    <div class="calendar">
+      <div class="calendar-header">
+        <div class="calendar-title" id="calendarTitle"></div>
+      </div>
+      <div class="calendar-months" id="calendarMonths"></div>
+    </div>
+
+    <div class="history">
+      <div class="history-header">
+        <div class="history-title">Historia wizyt</div>
+        <button class="history-clear" id="clearButton">Wyczyść</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <div class="footer">
+      Dane trzymane lokalnie w przeglądarce  
+      <span>nic nie wychodzi poza ten telefon</span>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="typeModalBackdrop">
+    <div class="modal">
+      <div class="modal-title">Rodzaj kupy</div>
+      <div class="modal-subtitle">Wybierz przybliżony rodzaj według skali Bristol</div>
+      <div class="type-grid">
+        <button class="type-btn" data-type="1">
+          <div class="type-btn-main">Typ 1 bardzo twarda</div>
+          <div class="type-btn-note">oddzielne grudki</div>
+        </button>
+        <button class="type-btn" data-type="2">
+          <div class="type-btn-main">Typ 2 twarda</div>
+          <div class="type-btn-note">kiełbasa z grudkami</div>
+        </button>
+        <button class="type-btn" data-type="3">
+          <div class="type-btn-main">Typ 3 lekko twarda</div>
+          <div class="type-btn-note">pęknięta powierzchnia</div>
+        </button>
+        <button class="type-btn" data-type="4">
+          <div class="type-btn-main">Typ 4 idealna</div>
+          <div class="type-btn-note">gładka kiełbasa</div>
+        </button>
+        <button class="type-btn" data-type="5">
+          <div class="type-btn-main">Typ 5 miękka</div>
+          <div class="type-btn-note">miękkie kłaczki</div>
+        </button>
+        <button class="type-btn" data-type="6">
+          <div class="type-btn-main">Typ 6 papka</div>
+          <div class="type-btn-note">poszarpana papkowata</div>
+        </button>
+        <button class="type-btn" data-type="7">
+          <div class="type-btn-main">Typ 7 wodnista</div>
+          <div class="type-btn-note">prawie sama woda</div>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-cancel" id="cancelTypeButton">Anuluj</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "toiletKingEntriesV2";
+
+    function loadEntries() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+      } catch (e) {
+        console.error("Błąd odczytu danych", e);
+        return [];
+      }
+    }
+
+    function saveEntries(entries) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      } catch (e) {
+        console.error("Błąd zapisu danych", e);
+      }
+    }
+
+    let pendingTimestamp = null;
+
+    function startAddEntry() {
+      pendingTimestamp = new Date();
+      openTypeModal();
+    }
+
+    function commitEntry(type) {
+      if (!pendingTimestamp) return;
+      const entries = loadEntries();
+      entries.push({
+        id: pendingTimestamp.getTime(),
+        timestamp: pendingTimestamp.toISOString(),
+        type: type
+      });
+      saveEntries(entries);
+      pendingTimestamp = null;
+      closeTypeModal();
+      render();
+    }
+
+    function clearAll() {
+      if (!confirm("Na pewno usunąć całą historię Toaletowego Króla")) return;
+      saveEntries([]);
+      render();
+    }
+
+    function formatDate(date) {
+      return date.toLocaleDateString("pl-PL", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString("pl-PL", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function isSameDay(a, b) {
+      return (
+        a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate()
+      );
+    }
+
+    function getWeekRange(date) {
+      const d = new Date(date);
+      const day = (d.getDay() + 6) % 7;
+      const monday = new Date(d);
+      monday.setDate(d.getDate() - day);
+      monday.setHours(0, 0, 0, 0);
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      sunday.setHours(23, 59, 59, 999);
+      return { monday, sunday };
+    }
+
+    function getMonthRange(date) {
+      const d = new Date(date);
+      const start = new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0, 0);
+      const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
+      return { start, end };
+    }
+
+    function getYearRange(date) {
+      const d = new Date(date);
+      const start = new Date(d.getFullYear(), 0, 1, 0, 0, 0, 0);
+      const end = new Date(d.getFullYear(), 11, 31, 23, 59, 59, 999);
+      return { start, end };
+    }
+
+    function calculateStreak(entries) {
+      if (entries.length === 0) return 0;
+      const daysWithEntry = new Set(
+        entries.map(e => {
+          const d = new Date(e.timestamp);
+          return d.toISOString().slice(0, 10);
+        })
+      );
+      let streak = 0;
+      const today = new Date();
+      let current = new Date(today);
+
+      while (true) {
+        const key = current.toISOString().slice(0, 10);
+        if (daysWithEntry.has(key)) {
+          streak += 1;
+          current.setDate(current.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    function calculateBadges(entries, streak) {
+      const total = entries.length;
+      const badges = [];
+
+      if (total >= 1) {
+        badges.push("Pierwsza wizyta zapisany start");
+      }
+      if (total >= 10) {
+        badges.push("Porcelanowy entuzjasta 10 wizyt");
+      }
+      if (total >= 30) {
+        badges.push("Master of throne 30 wizyt");
+      }
+      if (total >= 100) {
+        badges.push("Legenda sedesu 100 wizyt");
+      }
+
+      if (streak >= 3) {
+        badges.push("Seria 3 dni z wpisem");
+      }
+      if (streak >= 7) {
+        badges.push("Tygodniowy warrior 7 dni pod rząd");
+      }
+      if (streak >= 30) {
+        badges.push("Żelazne jelita 30 dni serii");
+      }
+
+      const today = new Date();
+      const { monday, sunday } = getWeekRange(today);
+      const thisWeekEntries = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d >= monday && d <= sunday;
+      });
+      const daysThisWeek = new Set(
+        thisWeekEntries.map(e => new Date(e.timestamp).getDay())
+      ).size;
+      if (daysThisWeek >= 5) {
+        badges.push("Stabilny tydzień wpis w większości dni");
+      }
+
+      if (badges.length === 0) {
+        badges.push("Nowy na tronie zbieraj pierwsze wpisy");
+      }
+
+      return badges;
+    }
+
+    function calculatePoints(entries) {
+      if (entries.length === 0) return 0;
+
+      const sorted = [...entries].sort(
+        (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+      );
+      let points = 0;
+      let prevDate = null;
+
+      for (const entry of sorted) {
+        const current = new Date(entry.timestamp);
+        points += 10;
+
+        if (prevDate) {
+          const diffHours = Math.abs(current - prevDate) / 36e5;
+          if (diffHours >= 12 && diffHours <= 36) {
+            points += 5;
+          }
+        }
+
+        prevDate = current;
+      }
+
+      const streak = calculateStreak(entries);
+      points += streak * 3;
+
+      return points;
+    }
+
+    function typeLabel(type) {
+      switch (type) {
+        case 1: return "Typ 1 bardzo twarda";
+        case 2: return "Typ 2 twarda";
+        case 3: return "Typ 3 lekko twarda";
+        case 4: return "Typ 4 idealna";
+        case 5: return "Typ 5 miękka";
+        case 6: return "Typ 6 papka";
+        case 7: return "Typ 7 wodnista";
+        default: return "Typ nieznany";
+      }
+    }
+
+    function renderCalendar(entries) {
+      const container = document.getElementById("calendarMonths");
+      const titleEl = document.getElementById("calendarTitle");
+      container.innerHTML = "";
+
+      const today = new Date();
+      const year = today.getFullYear();
+      titleEl.textContent = "Kalendarz " + year;
+
+      const yearEntries = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d.getFullYear() === year;
+      });
+
+      const dayStats = {};
+      yearEntries.forEach(e => {
+        const d = new Date(e.timestamp);
+        const key = d.toISOString().slice(0, 10);
+        if (!dayStats[key]) {
+          dayStats[key] = { count: 0 };
+        }
+        dayStats[key].count += 1;
+      });
+
+      const monthNames = [
+        "Styczeń", "Luty", "Marzec", "Kwiecień",
+        "Maj", "Czerwiec", "Lipiec", "Sierpień",
+        "Wrzesień", "Październik", "Listopad", "Grudzień"
+      ];
+
+      const weekdays = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
+
+      for (let m = 0; m < 12; m++) {
+        const monthBox = document.createElement("div");
+        monthBox.className = "cal-month";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "cal-month-name";
+        nameEl.textContent = monthNames[m];
+        monthBox.appendChild(nameEl);
+
+        const grid = document.createElement("div");
+        grid.className = "cal-grid";
+
+        weekdays.forEach(w => {
+          const wd = document.createElement("div");
+          wd.className = "cal-weekday";
+          wd.textContent = w;
+          grid.appendChild(wd);
+        });
+
+        const firstDay = new Date(year, m, 1);
+        const lastDay = new Date(year, m + 1, 0);
+        const firstWeekday = (firstDay.getDay() + 6) % 7;
+
+        for (let i = 0; i < firstWeekday; i++) {
+          const empty = document.createElement("div");
+          empty.className = "cal-day empty";
+          grid.appendChild(empty);
+        }
+
+        let d = new Date(firstDay);
+        while (d <= lastDay) {
+          const cell = document.createElement("div");
+          cell.className = "cal-day";
+          const dayNum = d.getDate();
+          cell.textContent = dayNum.toString();
+
+          const key = d.toISOString().slice(0, 10);
+          if (dayStats[key]) {
+            cell.classList.add("has-entry");
+            const count = dayStats[key].count;
+            cell.title = "Wizyty " + count;
+          }
+
+          if (isSameDay(d, today)) {
+            cell.classList.add("today");
+          }
+
+          grid.appendChild(cell);
+          d.setDate(d.getDate() + 1);
+        }
+
+        monthBox.appendChild(grid);
+        container.appendChild(monthBox);
+      }
+    }
+
+    function showStats() {
+      const entries = loadEntries();
+      if (entries.length === 0) {
+        alert("Brak danych statystycznych brak zapisanych wizyt");
+        return;
+      }
+
+      const today = new Date();
+      const { start: yearStart, end: yearEnd } = getYearRange(today);
+      const yearEntries = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d >= yearStart && d <= yearEnd;
+      });
+
+      const totalYear = yearEntries.length;
+      const allTotal = entries.length;
+
+      const typeCounts = {};
+      yearEntries.forEach(e => {
+        const t = e.type || 0;
+        if (!typeCounts[t]) typeCounts[t] = 0;
+        typeCounts[t] += 1;
+      });
+
+      let dominantType = null;
+      let dominantCount = 0;
+      Object.keys(typeCounts).forEach(k => {
+        if (typeCounts[k] > dominantCount) {
+          dominantCount = typeCounts[k];
+          dominantType = parseInt(k, 10);
+        }
+      });
+
+      const yearStartDate = new Date(today.getFullYear(), 0, 1);
+      const daysElapsed = Math.max(
+        1,
+        Math.floor((today - yearStartDate) / 86400000) + 1
+      );
+      const avgPerDay = totalYear / daysElapsed;
+      const estimatedYear = Math.round(avgPerDay * 365);
+
+      let msg = "";
+      msg += "Statystyki roczne\n\n";
+      msg += "Zapisane wizyty w tym roku " + totalYear + "\n";
+      msg += "Łącznie od początku " + allTotal + "\n\n";
+      msg += "Szacunkowa liczba wizyt w całym roku przy obecnym tempie około " + estimatedYear + "\n\n";
+
+      if (dominantType) {
+        const percent = ((dominantCount / Math.max(totalYear, 1)) * 100).toFixed(1);
+        msg += "Najczęstszy rodzaj kupy w tym roku\n";
+        msg += typeLabel(dominantType) + " około " + percent + " procent wpisów\n\n";
+      }
+
+      msg += "Rozkład według typów\n";
+      [1, 2, 3, 4, 5, 6, 7].forEach(t => {
+        if (typeCounts[t]) {
+          msg += "Typ " + t + " liczba " + typeCounts[t] + "\n";
+        }
+      });
+
+      alert(msg);
+    }
+
+    function render() {
+      const entries = loadEntries();
+      const today = new Date();
+      const { monday, sunday } = getWeekRange(today);
+      const { start: monthStart, end: monthEnd } = getMonthRange(today);
+      const { start: yearStart, end: yearEnd } = getYearRange(today);
+
+      const todayCount = entries.filter(e =>
+        isSameDay(new Date(e.timestamp), today)
+      ).length;
+
+      const weekCount = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d >= monday && d <= sunday;
+      }).length;
+
+      const monthCount = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d >= monthStart && d <= monthEnd;
+      }).length;
+
+      const yearCount = entries.filter(e => {
+        const d = new Date(e.timestamp);
+        return d >= yearStart && d <= yearEnd;
+      }).length;
+
+      const totalCount = entries.length;
+      const streak = calculateStreak(entries);
+      const badges = calculateBadges(entries, streak);
+      const points = calculatePoints(entries);
+
+      document.getElementById("todayCount").textContent = todayCount;
+      document.getElementById("weekCount").textContent = weekCount;
+      document.getElementById("monthCount").textContent = monthCount;
+      document.getElementById("yearCount").textContent = yearCount;
+      document.getElementById("totalCount").textContent = totalCount;
+
+      document.getElementById("streakInfo").textContent =
+        "Seria dni ze wpisem " + streak;
+
+      document.getElementById("weekExtra").textContent =
+        weekCount === 0
+          ? "Czekamy na ruch"
+          : "Średnia na dzień " + (weekCount / 7).toFixed(1);
+
+      document.getElementById("monthExtra").textContent =
+        monthCount === 0
+          ? "Nowy miesiąc czysta karta"
+          : "Dni z wpisem szacunkowo " +
+            Math.min(monthCount, 30).toString();
+
+      const monthIndex = today.getMonth();
+      const monthsElapsed = monthIndex + 1;
+      document.getElementById("yearExtra").textContent =
+        yearCount === 0
+          ? "Nowy rok jeszcze bez wpisu"
+          : "Średnio na miesiąc " +
+            (yearCount / Math.max(monthsElapsed, 1)).toFixed(1);
+
+      document.getElementById("pointsInfo").textContent =
+        points + " punktów";
+
+      const mainBadgeEl = document.getElementById("mainBadge");
+      if (totalCount >= 50) {
+        mainBadgeEl.textContent = "Mistrz sedesu";
+      } else if (totalCount >= 20) {
+        mainBadgeEl.textContent = "Doświadczony bywalec";
+      } else if (totalCount >= 5) {
+        mainBadgeEl.textContent = "Rozkręcasz serię";
+      } else {
+        mainBadgeEl.textContent = "Nowy na tronie";
+      }
+
+      const badgeListEl = document.getElementById("badgeList");
+      badgeListEl.innerHTML = "";
+      badges.forEach(text => {
+        const pill = document.createElement("div");
+        pill.className = "badge-pill";
+        pill.textContent = text;
+        badgeListEl.appendChild(pill);
+      });
+
+      renderCalendar(entries);
+
+      const historyListEl = document.getElementById("historyList");
+      historyListEl.innerHTML = "";
+      const sortedDesc = [...entries].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+
+      if (sortedDesc.length === 0) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "12px";
+        empty.style.color = "#6b7280";
+        empty.textContent = "Brak wpisów kliknij przycisk powyżej po pierwszym posiedzeniu";
+        historyListEl.appendChild(empty);
+      } else {
+        sortedDesc.forEach(entry => {
+          const d = new Date(entry.timestamp);
+          const item = document.createElement("div");
+          item.className = "history-item";
+
+          const main = document.createElement("div");
+          main.className = "history-item-main";
+
+          const dateSpan = document.createElement("div");
+          dateSpan.className = "history-date";
+          dateSpan.textContent = formatDate(d);
+
+          const timeSpan = document.createElement("div");
+          timeSpan.className = "history-time";
+          timeSpan.textContent = formatTime(d);
+
+          main.appendChild(dateSpan);
+          main.appendChild(timeSpan);
+
+          const tag = document.createElement("div");
+          tag.className = "history-tag";
+          tag.textContent = typeLabel(entry.type || 0);
+
+          item.appendChild(main);
+          item.appendChild(tag);
+          historyListEl.appendChild(item);
+        });
+      }
+    }
+
+    function openTypeModal() {
+      const backdrop = document.getElementById("typeModalBackdrop");
+      backdrop.style.display = "flex";
+    }
+
+    function closeTypeModal() {
+      const backdrop = document.getElementById("typeModalBackdrop");
+      backdrop.style.display = "none";
+    }
+
+    document.getElementById("addEntryButton").addEventListener("click", startAddEntry);
+    document.getElementById("clearButton").addEventListener("click", clearAll);
+
+    document.getElementById("infoButton").addEventListener("click", () => {
+      alert(
+        "Zasady punktów\n\n" +
+        "1. Każda wizyta daje 10 punktów\n" +
+        "2. Jeśli między wizytami minęło od 12 do 36 godzin dodajemy 5 bonusowych punktów\n" +
+        "3. Za każdy dzień ciągłej serii wpisów dostajesz 3 punkty\n\n" +
+        "Im bardziej regularnie tym więcej punktów i lepsze odznaki"
+      );
+    });
+
+    document.getElementById("statsButton").addEventListener("click", showStats);
+
+    document.getElementById("cancelTypeButton").addEventListener("click", () => {
+      pendingTimestamp = null;
+      closeTypeModal();
+    });
+
+    document.querySelectorAll(".type-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const type = parseInt(btn.getAttribute("data-type"), 10);
+        commitEntry(type);
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
